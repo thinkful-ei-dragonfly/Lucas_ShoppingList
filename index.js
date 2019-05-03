@@ -141,6 +141,11 @@ function handleToggleHideFilter() {
   });
 }
 
+function updateNameforListItem(itemId, newName) {
+  // console.log("Toggling checked property for item with id " + itemId);
+  const item = STORE.items.find(item => item.id === itemId);
+  item.name = newName;
+}
 function handleSearchFilter(){
   $('#js-shopping-list-search-form').submit(function(event) {
     event.preventDefault();
@@ -149,8 +154,16 @@ function handleSearchFilter(){
     renderShoppingList(searchEntry);
 
   });
-};
+}
 
+function handleRename(){
+  $('.shopping-list').on('click', '.shopping-item', event => {
+    const newName = prompt('Change item name', 'New name');
+    const id = getItemIdFromElement(event.currentTarget);
+    updateNameforListItem(id, newName);
+    renderShoppingList();
+  });
+}
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
 // that handle new item submission and user clicks on the "check" and "delete" buttons
@@ -162,6 +175,7 @@ function handleShoppingList() {
   handleDeleteItemClicked();
   handleToggleHideFilter();
   handleSearchFilter();
+  handleRename();
 }
 
 // when the page loads, call `handleShoppingList`
